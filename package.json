@@ -1,0 +1,30 @@
+{
+  "name": "time-clock",
+  "version": "1.0.0",
+  "description": "## Description",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CraigYeoman/time-clock.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CraigYeoman/time-clock/issues"
+  },
+  "homepage": "https://github.com/CraigYeoman/time-clock#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  },
+  "dependencies": {
+    "dotenv": "^16.1.4",
+    "express": "^4.18.2",
+    "mongoose": "^7.2.2"
+  }
+}
