@@ -1,0 +1,96 @@
+import Employee from "../models/employee.js";
+import TimeStamps from "../models/timestamps.js";
+
+const getAllEmployees = async (req, res) => {
+  const employees = await Employee.find().sort();
+  res.status(200).json({ employees });
+};
+
+const employeeDetail = async (req, res, next) => {
+  async.parallel(
+    {
+      employee(callback) {
+        Employee.findById(req.params.id).exec(callback);
+      },
+      timeStamps(callback) {
+        TimeStamps.findById({ employeeId: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if (results.employee == null) {
+        const err = new Error("Employee not found");
+        err.status = 404;
+        return next(err);
+      }
+      res.status(200).json({
+        employee: results.employee,
+        timeStamps: results.timeStamps,
+      });
+    }
+  );
+};
+
+const employeeCreate = (req, res, next) => {
+  const employee = new Employee({
+    name: req.body.name,
+    pin: req.body.pin,
+  });
+
+  employee.save((err) => {
+    if (err) {
+      return next(err);
+    }
+    // Part saved.
+    res.status(200).json({
+      msg: "Employee created",
+      employee: employee,
+    });
+  });
+};
+
+const employeeDelete = (req, res, next) => {
+  Employee.findByIdAndRemove(req.params.id, (err) => {
+    if (err) {
+      return next(err);
+    }
+    // Success
+    res.status(200).json({
+      msg: "Complete",
+    });
+  });
+};
+
+const employeeEdit = (req, res, next) => {
+  const employee = new Employee({
+    name: req.body.name,
+    pin: req.body.pin,
+  });
+
+  Employee.findByIdAndUpdate(
+    req.params.id,
+    employee,
+    {},
+    (err, updatedEmployee) => {
+      if (err) {
+        return next(err);
+      }
+
+      res.status(200).json({
+        msg: "Employee edited",
+        updatedEmployee: updatedEmployee,
+        employee: employee,
+      });
+    }
+  );
+};
+
+export {
+  getAllEmployees,
+  employeeDetail,
+  employeeCreate,
+  employeeDelete,
+  employeeEdit,
+};
