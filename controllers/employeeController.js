@@ -1,5 +1,6 @@
 import Employee from "../models/employee.js";
-import TimeStamps from "../models/timestamps.js";
+import TimeStamp from "../models/timeStamp.js";
+import { body, validationResult } from "express-validator";
 
 const getAllEmployees = async (req, res) => {
   const employees = await Employee.find().sort();
@@ -13,7 +14,7 @@ const employeeDetail = async (req, res, next) => {
         Employee.findById(req.params.id).exec(callback);
       },
       timeStamps(callback) {
-        TimeStamps.findById({ employeeId: req.params.id }).exec(callback);
+        TimeStamp.findById({ employeeId: req.params.id }).exec(callback);
       },
     },
     (err, results) => {
@@ -33,23 +34,44 @@ const employeeDetail = async (req, res, next) => {
   );
 };
 
-const employeeCreate = (req, res, next) => {
-  const employee = new Employee({
-    name: req.body.name,
-    pin: req.body.pin,
-  });
+const employeeCreate = [
+  body("name", "Name required").trim().isLength({ min: 1 }).escape(),
+  body("pin", "Pin required").trim().isLength({ min: 4 }).escape(),
 
-  employee.save((err) => {
-    if (err) {
-      return next(err);
+  async (req, res, next) => {
+    console.log(req.body);
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      console.log(errors);
+      res.status(errors).json({
+        employee: req.body,
+        errors: errors.array(),
+      });
+
+      return;
     }
-    // Part saved.
-    res.status(200).json({
-      msg: "Employee created",
-      employee: employee,
+
+    const employee = new Employee({
+      name: req.body.name,
+      pin: req.body.pin,
     });
-  });
-};
+
+    try {
+      employee.save();
+      res.status(200).json({
+        msg: "Employee created",
+        employee: employee,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(errors).json({
+        employee: req.body,
+        errors: errors.array(),
+      });
+    }
+  },
+];
 
 const employeeDelete = (req, res, next) => {
   Employee.findByIdAndRemove(req.params.id, (err) => {

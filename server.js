@@ -3,12 +3,21 @@ import dotenv from "dotenv";
 import connectDB from "./db/connect.js";
 import errorHandlerMiddleware from "./middleware/error-handler.js";
 import notFoundMiddleware from "./middleware/not-found.js";
-import employeeRouter from "./routes/employees.js";
+import morgan from "morgan";
+import "express-async-errors";
+
+import employeeRouter from "./routes/employee.js";
 import timestampRouter from "./routes/timestamps.js";
 
 const app = express();
 
 dotenv.config();
+
+if (process.env.NODE_ENV !== "production") {
+  app.use(morgan("dev"));
+}
+
+app.use(express.json());
 
 app.use("/api/v1/timecard/employee", employeeRouter);
 app.use("/api/v1/timecard/timestamp", timestampRouter);

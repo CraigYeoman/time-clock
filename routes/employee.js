@@ -7,7 +7,7 @@ import {
   employeeCreate,
   employeeDelete,
   employeeEdit,
-} from "../controllers/employeeController";
+} from "../controllers/employeeController.js";
 
 router.route("/create").post(employeeCreate);
 

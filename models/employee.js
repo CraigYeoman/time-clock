@@ -7,4 +7,4 @@ const EmployeeSchema = new Schema({
   pin: { type: Number, required: true, minlength: 4, maxlength: 4 },
 });
 
-export default EmployeeSchema;
+export default mongoose.model("Employee", EmployeeSchema);

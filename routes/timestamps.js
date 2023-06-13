@@ -7,7 +7,7 @@ import {
   timeStampCreate,
   timeStampDelete,
   timeStampEdit,
-} from "../controllers/timeStampController";
+} from "../controllers/timeStampController.js";
 
 router.route("/create").post(timeStampCreate);
 

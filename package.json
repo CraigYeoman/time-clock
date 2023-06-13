@@ -5,8 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon server",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "server": "nodemon server.js --ignore client",
+    "client": "npm run start --prefix client",
+    "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
   },
   "repository": {
     "type": "git",
@@ -20,11 +21,16 @@
   },
   "homepage": "https://github.com/CraigYeoman/time-clock#readme",
   "devDependencies": {
+    "concurrently": "^8.2.0",
     "nodemon": "^2.0.22"
   },
   "dependencies": {
     "dotenv": "^16.1.4",
     "express": "^4.18.2",
-    "mongoose": "^7.2.2"
+    "express-async-errors": "^3.1.1",
+    "express-validator": "^7.0.1",
+    "http-status-codes": "^2.2.0",
+    "mongoose": "^7.2.2",
+    "morgan": "^1.10.0"
   }
 }

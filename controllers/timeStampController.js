@@ -1,5 +1,5 @@
 import Employee from "../models/employee.js";
-import TimeStamp from "../models/timestamp.js";
+import TimeStamp from "../models/timeStamp.js";
 
 const getAllTimeStamps = async (req, res) => {
   const timeStamps = await TimeStamp.find().populate("employee").sort();

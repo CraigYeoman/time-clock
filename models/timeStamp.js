@@ -14,4 +14,4 @@ const TimeStampSchema = new Schema({
   },
 });
 
-export default TimeStampSchema;
+export default mongoose.model("TimeStamp", TimeStampSchema);
