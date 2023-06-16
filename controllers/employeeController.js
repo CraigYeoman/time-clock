@@ -1,10 +1,21 @@
 import Employee from "../models/employee.js";
 import TimeStamp from "../models/timeStamp.js";
 import { body, validationResult } from "express-validator";
+import async from "async";
 
 const getAllEmployees = async (req, res) => {
-  const employees = await Employee.find().sort();
-  res.status(200).json({ employees });
+  const employees = await Employee.find();
+  const timeStamps = await TimeStamp.find();
+  res.status(200).json({ employees, timeStamps });
+};
+
+const index = async (req, res) => {
+  try {
+    const employees = await Employee.find();
+    res.status(200).json({ employees });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const employeeDetail = async (req, res, next) => {
@@ -115,4 +126,5 @@ export {
   employeeCreate,
   employeeDelete,
   employeeEdit,
+  index,
 };

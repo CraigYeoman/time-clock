@@ -25,20 +25,24 @@ const timeStampDetail = async (req, res, next) => {
 };
 
 const timeStampCreate = (req, res, next) => {
+  console.log(req.body);
   const timeStamp = new TimeStamp({
     employee: req.body.employeeId,
   });
-
-  timeStamp.save((err) => {
-    if (err) {
-      return next(err);
-    }
-    // Part saved.
+  try {
+    timeStamp.save();
     res.status(200).json({
       msg: "Time stamp created",
       timeStamp: timeStamp,
+      name: req.body.name,
     });
-  });
+  } catch (error) {
+    console.log(error);
+    res.status(error).json({
+      timeStamp: req.body,
+      errors: error.array(),
+    });
+  }
 };
 
 const timeStampDelete = (req, res, next) => {
